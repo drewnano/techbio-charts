@@ -5,35 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI biotech funding landscape</title>
 <style>
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 32px 16px 48px;
-    color: #000000;
-    background: #ffffff;
-    line-height: 1.5;
-  }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; max-width: 960px; margin: 0 auto; padding: 32px 16px 48px; color: #000; background: #fff; line-height: 1.5; }
   h1 { font-size: 26px; font-weight: 600; margin: 0 0 6px; }
   h2 { font-size: 18px; font-weight: 600; margin: 48px 0 4px; }
-  .intro { font-size: 15px; color: #333333; margin: 0 0 8px; }
-  .subtitle { font-size: 13px; color: #444444; margin: 0 0 20px; }
-  .legend { display: flex; flex-wrap: wrap; gap: 10px 16px; margin-bottom: 12px; font-size: 12px; color: #000000; align-items: center; font-weight: 500; }
+  .intro { font-size: 15px; color: #333; margin: 0 0 8px; }
+  .subtitle { font-size: 13px; color: #444; margin: 0 0 20px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px 16px; margin-bottom: 12px; font-size: 12px; color: #000; align-items: center; font-weight: 500; }
   .legend-item { display: flex; align-items: center; gap: 6px; }
   .legend-dot { width: 12px; height: 12px; border-radius: 50%; }
-  .size-note { margin-left: auto; font-size: 11px; color: #000000; }
-  .chart-wrap { position: relative; width: 100%; height: 540px; }
-  .footer { margin-top: 32px; padding-top: 16px; border-top: 1px solid #eaeaea; font-size: 12px; color: #666666; text-align: center; }
+  .size-note { margin-left: auto; font-size: 11px; color: #000; }
+  .chart-wrap { position: relative; width: 100%; height: 580px; }
+  .footer { margin-top: 32px; padding-top: 16px; border-top: 1px solid #eaeaea; font-size: 12px; color: #666; text-align: center; }
 </style>
 </head>
 <body>
-
 <h1>AI biotech: funding landscape & clinical progress</h1>
 <p class="intro">Two views of the AI-in-drug-discovery cohort. Hover any bubble for details.</p>
 
 <h2>1. Funding stage by category</h2>
 <p class="subtitle">Where each company sits on the venture-to-public spectrum. Bubble size = capital raised.</p>
-
 <div class="legend">
   <span class="legend-item"><span class="legend-dot" style="background: #7F77DD;"></span>Pure in silico</span>
   <span class="legend-item"><span class="legend-dot" style="background: #1D9E75;"></span>AI-native wet lab</span>
@@ -41,14 +31,10 @@
   <span class="legend-item"><span class="legend-dot" style="background: #D4537E;"></span>Traditional rebrand</span>
   <span class="size-note">Bubble size = capital raised</span>
 </div>
-
-<div class="chart-wrap">
-  <canvas id="chart1" role="img" aria-label="Bubble chart of AI biotech companies plotted by category and funding stage, sized by capital raised">Companies plotted by category and funding stage.</canvas>
-</div>
+<div class="chart-wrap"><canvas id="chart1"></canvas></div>
 
 <h2>2. Capital raised vs. clinical progress</h2>
 <p class="subtitle">Drug-developers only (picks & shovels excluded). Big pharma plotted below the $0 line — no AI-specific raises but real clinical pipelines. Bubble size = active trials.</p>
-
 <div class="legend">
   <span class="legend-item"><span class="legend-dot" style="background: #7F77DD;"></span>Pure in silico</span>
   <span class="legend-item"><span class="legend-dot" style="background: #1D9E75;"></span>AI-native wet lab</span>
@@ -56,38 +42,24 @@
   <span class="legend-item"><span class="legend-dot" style="background: #888780;"></span>Big pharma AI</span>
   <span class="size-note">Dot size = active trials</span>
 </div>
+<div class="chart-wrap"><canvas id="chart2"></canvas></div>
 
-<div class="chart-wrap">
-  <canvas id="chart2" role="img" aria-label="Scatter plot of capital raised versus max clinical phase">Companies plotted by capital raised and max trial phase.</canvas>
-</div>
-
-<p class="footer">Categories: pure in silico, AI-native wet lab, picks & shovels, traditional rebrand, big pharma AI.</p>
+<p class="footer">Updated 2026-06-07 · Categories: pure in silico, AI-native wet lab, picks & shovels, traditional rebrand, big pharma AI.</p>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
 (function(){
-  // ============= CHART 1: Category × Funding Stage =============
+  // ========== CHART 1 ==========
   const categories1 = ['traditional_rebrand','picks_and_shovels','ai_native_wet_lab','pure_in_silico'];
-  const categoryLabels1 = {
-    traditional_rebrand: 'Traditional rebrand',
-    picks_and_shovels: 'Picks & shovels',
-    ai_native_wet_lab: 'AI-native wet lab',
-    pure_in_silico: 'Pure in silico'
-  };
+  const categoryLabels1 = { traditional_rebrand: 'Traditional rebrand', picks_and_shovels: 'Picks & shovels', ai_native_wet_lab: 'AI-native wet lab', pure_in_silico: 'Pure in silico' };
   const stages = ['Seed','Series A','Series B','Series B+','Series C','Series E','Series F','De-SPAC merger','IPO'];
-  const colors1 = {
-    pure_in_silico: '#7F77DD',
-    ai_native_wet_lab: '#1D9E75',
-    picks_and_shovels: '#D85A30',
-    traditional_rebrand: '#D4537E'
-  };
-
+  const colors1 = { pure_in_silico: '#7F77DD', ai_native_wet_lab: '#1D9E75', picks_and_shovels: '#D85A30', traditional_rebrand: '#D4537E' };
   const raw1 = [
+    {name:'Isomorphic Labs', cat:'pure_in_silico', raised:2700, stage:'Series B'},
     {name:'Ginkgo Bioworks', cat:'picks_and_shovels', raised:1600, stage:'De-SPAC merger'},
     {name:'Recursion', cat:'ai_native_wet_lab', raised:1500, stage:'IPO'},
     {name:'Xaira', cat:'ai_native_wet_lab', raised:1000, stage:'Series A'},
-    {name:'Relay Tx', cat:'pure_in_silico', raised:800, stage:'IPO'},
-    {name:'Isomorphic Labs', cat:'pure_in_silico', raised:600, stage:'Series A'},
+    {name:'Relay Tx', cat:'ai_native_wet_lab', raised:800, stage:'IPO'},
     {name:'Absci', cat:'ai_native_wet_lab', raised:280, stage:'IPO'},
     {name:'Generate Bio', cat:'ai_native_wet_lab', raised:273, stage:'Series C'},
     {name:'Schrödinger', cat:'traditional_rebrand', raised:232, stage:'IPO'},
@@ -101,112 +73,86 @@
     {name:'Cradle', cat:'ai_native_wet_lab', raised:73, stage:'Series B'},
     {name:'Chai Discovery', cat:'ai_native_wet_lab', raised:30, stage:'Seed'}
   ];
+  raw1.forEach((d, i) => { d._idx = i; });
+  const cl1 = {};
+  raw1.forEach(d => { const k = d.stage + '|' + d.cat; (cl1[k] = cl1[k] || []).push(d); });
+  const xOff1 = new Array(raw1.length).fill(0);
+  const tier1 = new Array(raw1.length).fill(0);
+  Object.values(cl1).forEach(g => {
+    if (g.length <= 1) return;
+    g.sort((a,b) => b.raised - a.raised);
+    const n = g.length, spread = n === 2 ? 0.4 : 0.85;
+    g.forEach((d, i) => { xOff1[d._idx] = -spread/2 + (i * spread / (n - 1)); tier1[d._idx] = i % 2; });
+  });
 
-  function radius1(m){ return Math.max(7, Math.sqrt(m) * 1.15); }
-
+  function radius1(m){ return Math.max(7, Math.sqrt(m) * 0.65); }
   const datasets1 = categories1.map(cat => ({
     label: categoryLabels1[cat],
     data: raw1.filter(d => d.cat === cat).map(d => ({
-      x: stages.indexOf(d.stage),
+      x: stages.indexOf(d.stage) + xOff1[d._idx],
       y: categories1.indexOf(cat),
       r: radius1(d.raised),
-      name: d.name,
-      raised: d.raised,
-      stageLabel: d.stage
+      name: d.name, raised: d.raised, stageLabel: d.stage, tier: tier1[d._idx]
     })),
-    backgroundColor: colors1[cat] + 'CC',
-    borderColor: colors1[cat],
-    borderWidth: 1
+    backgroundColor: colors1[cat] + 'CC', borderColor: colors1[cat], borderWidth: 1
   }));
 
-  const labelPlugin1 = {
-    id: 'pointLabels1',
-    afterDatasetsDraw(chart) {
-      const ctx = chart.ctx;
-      ctx.save();
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      chart.data.datasets.forEach((ds, di) => {
-        const meta = chart.getDatasetMeta(di);
-        meta.data.forEach((pt, i) => {
-          const d = ds.data[i];
-          const {x, y} = pt.getCenterPoint();
-          const r = pt.options.radius;
-          ctx.fillStyle = '#000000';
-          ctx.font = '600 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-          ctx.fillText(d.name, x, y - r - 8);
-          ctx.font = '500 10px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-          ctx.fillText('$' + (d.raised >= 1000 ? (d.raised/1000).toFixed(1) + 'B' : d.raised + 'M'), x, y - r - 20);
-        });
+  const lp1 = { id: 'lp1', afterDatasetsDraw(chart) {
+    const ctx = chart.ctx; ctx.save();
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    chart.data.datasets.forEach((ds, di) => {
+      const meta = chart.getDatasetMeta(di);
+      meta.data.forEach((pt, i) => {
+        const d = ds.data[i]; const {x, y} = pt.getCenterPoint(); const r = pt.options.radius;
+        const off = d.tier === 1 ? 24 : 0;
+        ctx.fillStyle = '#000';
+        ctx.font = '600 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+        ctx.fillText(d.name, x, y - r - 8 - off);
+        ctx.font = '500 10px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+        ctx.fillText('$' + (d.raised >= 1000 ? (d.raised/1000).toFixed(1) + 'B' : d.raised + 'M'), x, y - r - 20 - off);
       });
-      ctx.restore();
-    }
-  };
+    });
+    ctx.restore();
+  } };
 
   new Chart(document.getElementById('chart1'), {
-    type: 'bubble',
-    data: { datasets: datasets1 },
-    plugins: [labelPlugin1],
+    type: 'bubble', data: { datasets: datasets1 }, plugins: [lp1],
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      layout: { padding: { top: 30, right: 30, bottom: 10, left: 10 } },
+      responsive: true, maintainAspectRatio: false,
+      layout: { padding: { top: 48, right: 30, bottom: 10, left: 10 } },
       plugins: {
         legend: { display: false },
-        tooltip: {
-          callbacks: {
-            title: (items) => items[0].raw.name,
-            label: (ctx) => {
-              const d = ctx.raw;
-              return [
-                'Capital: $' + (d.raised >= 1000 ? (d.raised/1000).toFixed(1) + 'B' : d.raised + 'M'),
-                'Stage: ' + d.stageLabel,
-                'Category: ' + categoryLabels1[categories1[d.y]]
-              ];
-            }
+        tooltip: { callbacks: {
+          title: (items) => items[0].raw.name,
+          label: (ctx) => {
+            const d = ctx.raw;
+            return ['Capital: $' + (d.raised >= 1000 ? (d.raised/1000).toFixed(1) + 'B' : d.raised + 'M'), 'Stage: ' + d.stageLabel, 'Category: ' + categoryLabels1[categories1[Math.round(d.y)]]];
           }
-        }
+        } }
       },
       scales: {
-        x: {
-          type: 'linear',
-          min: -0.7,
-          max: stages.length - 0.3,
-          ticks: { stepSize: 1, callback: (v) => stages[v] || '', maxRotation: 45, minRotation: 30, font: { size: 11, weight: '600' }, color: '#000000' },
-          title: { display: true, text: 'Funding stage maturity →', font: { size: 12, weight: '600' }, color: '#000000' },
-          grid: { color: 'rgba(0,0,0,0.08)' }
-        },
-        y: {
-          type: 'linear',
-          min: -0.5,
-          max: categories1.length - 0.5,
-          ticks: { stepSize: 1, callback: (v) => categoryLabels1[categories1[v]] || '', font: { size: 12, weight: '600' }, color: '#000000' },
-          grid: { color: 'rgba(0,0,0,0.08)' }
-        }
+        x: { type: 'linear', min: -0.7, max: stages.length - 0.3,
+          ticks: { stepSize: 1, callback: (v) => stages[v] || '', maxRotation: 45, minRotation: 30, font: { size: 11, weight: '600' }, color: '#000', autoSkip: false },
+          afterBuildTicks: (axis) => { axis.ticks = stages.map((_,i)=>({value:i})); },
+          title: { display: true, text: 'Funding stage maturity →', font: { size: 12, weight: '600' }, color: '#000' },
+          grid: { color: 'rgba(0,0,0,0.08)' } },
+        y: { type: 'linear', min: -0.5, max: categories1.length - 0.5,
+          ticks: { stepSize: 1, callback: (v) => categoryLabels1[categories1[v]] || '', font: { size: 12, weight: '600' }, color: '#000', autoSkip: false },
+          afterBuildTicks: (axis) => { axis.ticks = categories1.map((_,i)=>({value:i})); },
+          grid: { color: 'rgba(0,0,0,0.08)' } }
       }
     }
   });
 
-  // ============= CHART 2: Capital × Clinical Progress =============
+  // ========== CHART 2 ==========
   const phases = ['No trials', 'Ph1', 'Ph2', 'Ph3'];
-  const colors2 = {
-    pure_in_silico: '#7F77DD',
-    ai_native_wet_lab: '#1D9E75',
-    traditional_rebrand: '#D4537E',
-    big_pharma_ai: '#888780'
-  };
-  const categoryLabels2 = {
-    pure_in_silico: 'Pure in silico',
-    ai_native_wet_lab: 'AI-native wet lab',
-    traditional_rebrand: 'Traditional rebrand',
-    big_pharma_ai: 'Big pharma AI'
-  };
-
+  const colors2 = { pure_in_silico: '#7F77DD', ai_native_wet_lab: '#1D9E75', traditional_rebrand: '#D4537E', big_pharma_ai: '#888780' };
+  const categoryLabels2 = { pure_in_silico: 'Pure in silico', ai_native_wet_lab: 'AI-native wet lab', traditional_rebrand: 'Traditional rebrand', big_pharma_ai: 'Big pharma AI' };
   const raw2 = [
+    {name:'Isomorphic Labs', cat:'pure_in_silico', raised:2700, maxPhase:'No trials', trials:0, active:0},
     {name:'Recursion', cat:'ai_native_wet_lab', raised:1500, maxPhase:'Ph3', trials:2, active:4},
     {name:'Xaira', cat:'ai_native_wet_lab', raised:1000, maxPhase:'No trials', trials:0, active:0},
-    {name:'Relay Tx', cat:'pure_in_silico', raised:800, maxPhase:'Ph2', trials:2, active:2},
-    {name:'Isomorphic Labs', cat:'pure_in_silico', raised:600, maxPhase:'No trials', trials:0, active:0},
+    {name:'Relay Tx', cat:'ai_native_wet_lab', raised:800, maxPhase:'Ph2', trials:2, active:2},
     {name:'Absci', cat:'ai_native_wet_lab', raised:280, maxPhase:'Ph1', trials:1, active:0},
     {name:'Generate Bio', cat:'ai_native_wet_lab', raised:273, maxPhase:'No trials', trials:0, active:0},
     {name:'Schrödinger', cat:'traditional_rebrand', raised:232, maxPhase:'Ph1', trials:1, active:1},
@@ -220,110 +166,96 @@
     {name:'Novartis AI', cat:'big_pharma_ai', raised:null, maxPhase:'Ph3', trials:1, active:1, isPharma:true},
     {name:'Eli Lilly AI', cat:'big_pharma_ai', raised:null, maxPhase:'Ph3', trials:1, active:0, isPharma:true}
   ];
+  raw2.forEach((d, i) => { d._idx = i; });
+
+  const cols2 = {};
+  raw2.forEach(d => { const k = d.maxPhase; (cols2[k] = cols2[k] || []).push(d); });
+  const xOff2 = new Array(raw2.length).fill(0);
+  const tier2 = new Array(raw2.length).fill(0);
+  const yThresh = 335;
+  const yOf = d => d.isPharma ? -250 : d.raised;
+  Object.values(cols2).forEach(col => {
+    col.sort((a,b) => yOf(a) - yOf(b));
+    let clusters = [[col[0]]];
+    for (let i = 1; i < col.length; i++) {
+      const prev = clusters[clusters.length-1];
+      if (Math.abs(yOf(col[i]) - yOf(prev[prev.length-1])) < yThresh) prev.push(col[i]);
+      else clusters.push([col[i]]);
+    }
+    clusters.forEach(c => {
+      if (c.length <= 1) return;
+      c.sort((a,b) => (b.raised||0) - (a.raised||0));
+      const n = c.length;
+      let spread;
+      if (n === 2) spread = 0.4;
+      else if (n === 3) spread = 0.65;
+      else spread = Math.min(0.92, 0.16 * n);
+      c.forEach((d, i) => { xOff2[d._idx] = -spread/2 + (i * spread / (n - 1)); tier2[d._idx] = i % 2; });
+    });
+  });
 
   function radius2(active){ return Math.max(8, 8 + active * 4); }
-
   const categories2 = ['pure_in_silico','ai_native_wet_lab','traditional_rebrand','big_pharma_ai'];
   const datasets2 = categories2.map(cat => ({
     label: categoryLabels2[cat],
     data: raw2.filter(d => d.cat === cat).map(d => ({
-      x: phases.indexOf(d.maxPhase),
-      y: d.isPharma ? -150 : d.raised,
+      x: phases.indexOf(d.maxPhase) + xOff2[d._idx],
+      y: d.isPharma ? -250 : d.raised,
       r: radius2(d.active),
-      name: d.name,
-      raised: d.raised,
-      maxPhase: d.maxPhase,
-      active: d.active,
-      trials: d.trials,
-      isPharma: !!d.isPharma
+      name: d.name, raised: d.raised, maxPhase: d.maxPhase, active: d.active, trials: d.trials,
+      isPharma: !!d.isPharma, tier: tier2[d._idx]
     })),
-    backgroundColor: colors2[cat] + 'CC',
-    borderColor: colors2[cat],
-    borderWidth: 1
+    backgroundColor: colors2[cat] + 'CC', borderColor: colors2[cat], borderWidth: 1
   }));
 
-  const labelPlugin2 = {
-    id: 'pointLabels2',
-    afterDatasetsDraw(chart) {
-      const ctx = chart.ctx;
-      ctx.save();
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      chart.data.datasets.forEach((ds, di) => {
-        const meta = chart.getDatasetMeta(di);
-        meta.data.forEach((pt, i) => {
-          const d = ds.data[i];
-          const {x, y} = pt.getCenterPoint();
-          const r = pt.options.radius;
-          ctx.fillStyle = '#000000';
-          ctx.font = '600 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-          ctx.fillText(d.name, x, y - r - 7);
-          if (!d.isPharma) {
-            ctx.font = '500 10px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-            ctx.fillText('$' + (d.raised >= 1000 ? (d.raised/1000).toFixed(1) + 'B' : d.raised + 'M'), x, y - r - 18);
-          } else {
-            ctx.font = '500 10px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-            ctx.fillText('(no AI-specific raise)', x, y - r - 18);
-          }
-        });
+  const lp2 = { id: 'lp2', afterDatasetsDraw(chart) {
+    const ctx = chart.ctx; ctx.save();
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    chart.data.datasets.forEach((ds, di) => {
+      const meta = chart.getDatasetMeta(di);
+      meta.data.forEach((pt, i) => {
+        const d = ds.data[i]; const {x, y} = pt.getCenterPoint(); const r = pt.options.radius;
+        const off = d.tier === 1 ? 24 : 0;
+        ctx.fillStyle = '#000';
+        ctx.font = '600 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+        ctx.fillText(d.name, x, y - r - 7 - off);
+        ctx.font = '500 10px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+        if (!d.isPharma) ctx.fillText('$' + (d.raised >= 1000 ? (d.raised/1000).toFixed(1) + 'B' : d.raised + 'M'), x, y - r - 19 - off);
+        else ctx.fillText('(no AI-specific raise)', x, y - r - 19 - off);
       });
-      ctx.restore();
-    }
-  };
+    });
+    ctx.restore();
+  } };
 
   new Chart(document.getElementById('chart2'), {
-    type: 'bubble',
-    data: { datasets: datasets2 },
-    plugins: [labelPlugin2],
+    type: 'bubble', data: { datasets: datasets2 }, plugins: [lp2],
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      layout: { padding: { top: 30, right: 30, bottom: 10, left: 10 } },
+      responsive: true, maintainAspectRatio: false,
+      layout: { padding: { top: 48, right: 30, bottom: 10, left: 10 } },
       plugins: {
         legend: { display: false },
-        tooltip: {
-          callbacks: {
-            title: (items) => items[0].raw.name,
-            label: (ctx) => {
-              const d = ctx.raw;
-              const lines = [];
-              if (d.isPharma) {
-                lines.push('No separate AI funding round');
-              } else {
-                lines.push('Capital: $' + (d.raised >= 1000 ? (d.raised/1000).toFixed(1) + 'B' : d.raised + 'M'));
-              }
-              lines.push('Max phase: ' + d.maxPhase);
-              lines.push('Trials: ' + d.trials + ' (' + d.active + ' active)');
-              return lines;
-            }
+        tooltip: { callbacks: {
+          title: (items) => items[0].raw.name,
+          label: (ctx) => {
+            const d = ctx.raw; const lines = [];
+            if (d.isPharma) lines.push('No separate AI funding round');
+            else lines.push('Capital: $' + (d.raised >= 1000 ? (d.raised/1000).toFixed(1) + 'B' : d.raised + 'M'));
+            lines.push('Max phase: ' + d.maxPhase);
+            lines.push('Trials: ' + d.trials + ' (' + d.active + ' active)');
+            return lines;
           }
-        }
+        } }
       },
       scales: {
-        x: {
-          type: 'linear',
-          min: -0.5,
-          max: phases.length - 0.5,
-          ticks: { stepSize: 1, callback: (v) => phases[v] || '', font: { size: 12, weight: '600' }, color: '#000000' },
-          title: { display: true, text: 'Clinical progress (max phase reached) →', font: { size: 12, weight: '600' }, color: '#000000' },
-          grid: { color: 'rgba(0,0,0,0.08)' }
-        },
-        y: {
-          type: 'linear',
-          min: -250,
-          max: 1700,
-          ticks: {
-            callback: (v) => {
-              if (v < 0) return '';
-              if (v === 0) return '$0';
-              return '$' + (v >= 1000 ? (v/1000).toFixed(1) + 'B' : v + 'M');
-            },
-            font: { size: 11, weight: '600' },
-            color: '#000000'
-          },
-          title: { display: true, text: 'Capital raised ↑', font: { size: 12, weight: '600' }, color: '#000000' },
-          grid: { color: 'rgba(0,0,0,0.08)' }
-        }
+        x: { type: 'linear', min: -0.5, max: phases.length - 0.5,
+          ticks: { stepSize: 1, callback: (v) => phases[v] || '', font: { size: 12, weight: '600' }, color: '#000', autoSkip: false },
+          afterBuildTicks: (axis) => { axis.ticks = phases.map((_,i)=>({value:i})); },
+          title: { display: true, text: 'Clinical progress (max phase reached) →', font: { size: 12, weight: '600' }, color: '#000' },
+          grid: { color: 'rgba(0,0,0,0.08)' } },
+        y: { type: 'linear', min: -400, max: 2950,
+          ticks: { callback: (v) => { if (v < 0) return ''; if (v === 0) return '$0'; return '$' + (v >= 1000 ? (v/1000).toFixed(1) + 'B' : v + 'M'); }, font: { size: 11, weight: '600' }, color: '#000' },
+          title: { display: true, text: 'Capital raised ↑', font: { size: 12, weight: '600' }, color: '#000' },
+          grid: { color: 'rgba(0,0,0,0.08)' } }
       }
     }
   });
